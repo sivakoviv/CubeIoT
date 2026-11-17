@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>MyIoT — концепция проекта</title>
+  <title>MyIoT — модульная IoT-система</title>
   <style>
     :root {
       color-scheme: dark;
@@ -18,176 +18,204 @@
     }
     * { box-sizing: border-box; }
     body { margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 1rem; }
-    .deck { width: min(92vw, calc(82svh * 16 / 9), 1440px); }
+    .deck { width: min(94vw, calc(84svh * 16 / 9), 1440px); }
     .slide {
       display: none;
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      padding: clamp(1.75rem, 4.5vw, 4.5rem);
+      padding: clamp(1.6rem, 4vw, 4rem);
       overflow: hidden;
       border: 1px solid var(--line);
       border-radius: 20px;
-      background:
-        radial-gradient(ellipse at 92% 8%, #294b39 0, transparent 34%),
-        linear-gradient(145deg, #1a2821, #121b17 72%);
+      background: radial-gradient(ellipse at 92% 8%, #294b39 0, transparent 34%), linear-gradient(145deg, #1a2821, #121b17 72%);
       box-shadow: 0 24px 80px #0005;
     }
-    .slide.active { display: flex; flex-direction: column; justify-content: center; gap: 1rem; }
-    .slide::after {
-      content: "";
-      position: absolute;
-      width: 14rem;
-      height: 14rem;
-      right: -7rem;
-      bottom: -8rem;
-      border: 1px solid #a9e6c126;
-      border-radius: 50%;
-      box-shadow: 0 0 0 2rem #a9e6c10a, 0 0 0 4rem #a9e6c108;
-      pointer-events: none;
-    }
-    .eyebrow {
-      margin: 0;
-      color: var(--mint);
-      font-size: .78rem;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-    h1 { max-width: 13ch; margin: 0; font-size: clamp(3.2rem, 9vw, 7rem); line-height: .98; letter-spacing: -.06em; }
-    h2 { max-width: 27ch; margin: 0; font-size: clamp(1.8rem, 4vw, 3.5rem); line-height: 1.08; letter-spacing: -.04em; }
-    .lead { max-width: 40rem; margin: 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.5rem); line-height: 1.45; }
-    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; max-width: 58rem; }
-    .card { min-width: 0; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 12px; background: #ffffff08; }
-    .card h3 { margin: 0 0 .4rem; color: var(--mint); font-size: clamp(1rem, 1.7vw, 1.25rem); line-height: 1.25; overflow-wrap: anywhere; }
-    .card p { margin: 0; color: #e2eae4; font-size: clamp(.92rem, 1.45vw, 1.1rem); line-height: 1.4; overflow-wrap: anywhere; }
-    .module-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; max-width: 68rem; }
-    .module { position: relative; min-width: 0; padding: 1.1rem 1.2rem; border: 1px solid var(--line); border-radius: 14px; background: #ffffff08; }
-    .module:not(:last-child)::after { content: "→"; position: absolute; z-index: 1; top: 50%; right: -.82rem; padding: .1rem; transform: translate(50%, -50%); background: #17231d; color: var(--mint); font-size: 1.2rem; }
-    .module-index { margin: 0 0 .55rem; color: var(--muted); font-size: .76rem; font-weight: 700; letter-spacing: .12em; }
-    .module h3 { margin: 0 0 .4rem; color: var(--mint); font-size: clamp(1.05rem, 1.8vw, 1.35rem); }
-    .module p:last-child { margin: 0; color: #e2eae4; font-size: clamp(.9rem, 1.4vw, 1.05rem); line-height: 1.4; }
-    .pump-output { margin: 0; color: var(--muted); font-size: clamp(.95rem, 1.5vw, 1.1rem); font-weight: 700; }
-    .slide-idea .eyebrow, .slide-components .eyebrow { position: absolute; top: 1.6rem; left: 1.8rem; }
-    .note { max-width: 54rem; margin: 0; color: var(--muted); font-size: clamp(.9rem, 1.4vw, 1.08rem); line-height: 1.45; }
-    .source { color: var(--mint); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-    .controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem .2rem 0; color: var(--muted); }
+    .slide.active { display: flex; flex-direction: column; justify-content: center; gap: .8rem; }
+    .eyebrow { margin: 0; color: var(--mint); font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { max-width: 13ch; margin: 0; font-size: clamp(3rem, 8vw, 6.6rem); line-height: .96; letter-spacing: -.06em; }
+    h2 { max-width: 30ch; margin: 0; font-size: clamp(1.7rem, 3.6vw, 3rem); line-height: 1.08; letter-spacing: -.04em; }
+    h3 { margin: 0 0 .35rem; color: var(--mint); font-size: clamp(1rem, 1.55vw, 1.25rem); }
+    p { margin: 0; }
+    .lead { max-width: 45rem; color: var(--muted); font-size: clamp(1.05rem, 1.8vw, 1.45rem); line-height: 1.42; }
+    .note { max-width: 62rem; color: var(--muted); font-size: clamp(.82rem, 1.2vw, 1rem); line-height: 1.4; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; width: min(100%, 70rem); }
+    .card { min-width: 0; padding: .9rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: #ffffff08; }
+    .card p { color: #e2eae4; font-size: clamp(.88rem, 1.35vw, 1.06rem); line-height: 1.38; overflow-wrap: anywhere; }
+    .split { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: clamp(1rem, 3vw, 2.5rem); min-height: 0; }
+    .copy { display: grid; gap: .7rem; align-content: center; }
+    figure { min-width: 0; margin: 0; }
+    figure img { display: block; width: 100%; max-height: 48vh; object-fit: contain; border-radius: 12px; background: #ffffff0a; }
+    figcaption { margin-top: .35rem; color: var(--muted); font-size: .8rem; line-height: 1.3; }
+    .hero-image { position: absolute; right: 4%; bottom: 3%; width: 47%; max-height: 78%; object-fit: contain; border-radius: 18px; }
+    .hero-copy { position: relative; z-index: 1; width: 54%; }
+    .flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; align-items: stretch; width: min(100%, 72rem); }
+    .module { position: relative; padding: 1rem; border: 1px solid var(--line); border-radius: 14px; background: #ffffff08; }
+    .module h3 { font-size: clamp(1rem, 1.6vw, 1.3rem); }
+    .module p { color: #e2eae4; font-size: clamp(.85rem, 1.25vw, 1rem); line-height: 1.35; }
+    .module:not(:last-child)::after { content: "→"; position: absolute; top: 50%; right: -.9rem; z-index: 2; transform: translate(50%, -50%); color: var(--mint); background: #17231d; font-size: 1.3rem; }
+    .metric { color: var(--mint); font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 700; }
+    .controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem .2rem 0; color: var(--muted); }
     .buttons { display: flex; gap: .5rem; }
     button { min-width: 2.8rem; min-height: 2.8rem; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); color: #f2f5ef; font: inherit; cursor: pointer; }
     button:hover, button:focus-visible { border-color: var(--mint); outline: none; }
-    .hint { font-size: .9rem; }
-    @media (max-width: 650px) {
-      body { padding: .75rem; }
-      .deck { width: min(94vw, calc(90svh * 9 / 16)); }
-      .slide { aspect-ratio: 9 / 16; padding: 1.4rem; border-radius: 16px; }
-      .slide.active { gap: .8rem; }
-      .cards { grid-template-columns: 1fr; gap: .55rem; }
-      .card { padding: .8rem .9rem; }
-      .module-flow { grid-template-columns: 1fr; gap: .55rem; }
-      .module { padding: .75rem .9rem; }
-      .module:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -.66rem; transform: translate(50%, 50%); }
-      .slide-idea .eyebrow, .slide-components .eyebrow { top: 1rem; left: 1.4rem; }
+    .hint { font-size: .85rem; }
+    @media (max-width: 680px) {
+      body { padding: .5rem; }
+      .deck { width: min(96vw, calc(92svh * 9 / 16)); }
+      .slide { aspect-ratio: 9 / 16; padding: 1.25rem; border-radius: 16px; }
+      .slide.active { gap: .6rem; }
+      .split { grid-template-columns: 1fr; gap: .5rem; }
+      .grid { gap: .5rem; }
+      .card { padding: .65rem .75rem; }
+      .flow { grid-template-columns: 1fr; gap: .5rem; }
+      .module { padding: .7rem .8rem; }
+      .module:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -.65rem; transform: translate(50%, 50%); }
+      figure img { max-height: 28vh; }
+      .hero-image { right: 2%; bottom: 4%; width: 88%; max-height: 46%; }
+      .hero-copy { width: 90%; }
       .hint { display: none; }
     }
     @media print {
       @page { size: 16in 9in; margin: 0; }
       body { display: block; margin: 0; padding: 0; background: #101915; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
       .deck { width: 16in; margin: 0; padding: 0; }
-      .slide, .slide.active { display: flex !important; width: 16in; height: 9in; margin: 0; aspect-ratio: auto; padding: 1in 1.2in; border: 0; border-radius: 0; box-shadow: none; break-after: page; page-break-after: always; }
-      h1 { font-size: 64pt; }
-      h2 { font-size: 34pt; }
-      .lead { font-size: 19pt; }
-      .card p, .note { font-size: 14pt; }
-      .card h3 { font-size: 17pt; }
-      .module-flow { gap: .6in; }
-      .module { padding: .18in .22in; }
-      .module-index { font-size: 10pt; }
-      .module h3 { font-size: 17pt; }
-      .module p:last-child, .pump-output { font-size: 13pt; }
-      .module:not(:last-child)::after { right: -.36in; font-size: 18pt; }
-      .slide-idea .eyebrow, .slide-components .eyebrow { top: .55in; left: 1.2in; }
-      .controls { display: none; }
+      .slide, .slide.active { display: flex !important; width: 16in; height: 9in; margin: 0; aspect-ratio: auto; padding: .8in 1.05in; border: 0; border-radius: 0; box-shadow: none; break-after: page; page-break-after: always; }
       .slide:last-of-type { break-after: auto; page-break-after: auto; }
+      h1 { font-size: 60pt; }
+      h2 { font-size: 32pt; }
+      h3 { font-size: 16pt; }
+      .lead { font-size: 18pt; }
+      .card p, .module p { font-size: 13pt; }
+      .note, figcaption { font-size: 10pt; }
+      figure img { max-height: 5.2in; }
+      .hero-image { max-height: 6.6in; }
+      .controls { display: none; }
     }
   </style>
 </head>
 <body>
   <main class="deck" aria-label="Презентация MyIoT">
     <section class="slide active" aria-label="Слайд 1">
-      <p class="eyebrow">Модульный IoT-конструктор</p>
-      <h1>MyIoT</h1>
-      <p class="lead">Свои устройства для дома и сада.<br>Первый проект — автополив.</p>
-    </section>
-    <section class="slide slide-idea" aria-label="Слайд 2">
-      <p class="eyebrow">Идея</p>
-      <h2>Один контроллер — сменные модули</h2>
-      <div class="cards">
-        <article class="card"><h3>Модульность</h3><p>Питание, ESP, датчики и исполнительные блоки — отдельные корпуса.</p></article>
-        <article class="card"><h3>Безопасность</h3><p>Ошибки и перезапуск не должны самопроизвольно включать нагрузку.</p></article>
-        <article class="card"><h3>Продуманная конструкция</h3><p>Ключованные разъёмы, маркировка и крышки свободных портов.</p></article>
-        <article class="card"><h3>Простота</h3><p>Подключить модуль, настроить сценарий, оставить работать.</p></article>
+      <div class="hero-copy">
+        <p class="eyebrow">Модульная IoT-система</p>
+        <h1>MyIoT</h1>
+        <p class="lead">Один Main — отдельные кубики для датчиков, питания и управления нагрузками.</p>
       </div>
+      <img class="hero-image" src="../hardware/3Dprint/Cube_load_main.png" alt="CAD-сборка корпусов кубиков MyIoT Main и Load">
     </section>
+
+    <section class="slide" aria-label="Слайд 2">
+      <p class="eyebrow">Идея системы</p>
+      <h2>Каждый кубик отвечает за свою функцию</h2>
+      <div class="grid">
+        <article class="card"><h3>Main · контроллер</h3><p>Прошивка, локальные сценарии, Wi-Fi и обмен с сервером.</p></article>
+        <article class="card"><h3>Load · исполнение</h3><p>Два MOSFET-канала управляют допустимыми DC-нагрузками.</p></article>
+        <article class="card"><h3>Sensors · измерения</h3><p>Будущий модуль датчиков; пока не входит в текущие платы.</p></article>
+        <article class="card"><h3>Battery · автономность</h3><p>Будущий модуль питания, которому потребуется режим энергосбережения.</p></article>
+      </div>
+      <p class="note">Все модули подключаются к Main. Сейчас проектируются платы Main и Load.</p>
+    </section>
+
     <section class="slide" aria-label="Слайд 3">
-      <p class="eyebrow">Архитектура автополива</p>
-      <h2>Три модуля соединяются по цепочке</h2>
-      <div class="module-flow" aria-label="Модуль питания, ESP-контроллер, модуль MOSFET">
-        <article class="module"><p class="module-index">МОДУЛЬ 1</p><h3>Питание</h3><p>Подаёт питание на контроллер и нагрузку.</p></article>
-        <article class="module"><p class="module-index">МОДУЛЬ 2</p><h3>ESP32-C3</h3><p>Читает датчик и управляет исполнительным модулем.</p></article>
-        <article class="module"><p class="module-index">МОДУЛЬ 3</p><h3>MOSFET IRF520N</h3><p>Коммутирует питание помпы по сигналу ESP.</p></article>
+      <p class="eyebrow">Как это работает</p>
+      <h2>Main связывает сценарий и действие</h2>
+      <div class="flow">
+        <article class="module"><h3>1 · Команда или данные</h3><p>Кнопка, расписание, сервер или будущий кубик Sensors.</p></article>
+        <article class="module"><h3>2 · Main</h3><p>Проверяет команду и управляет логикой локально.</p></article>
+        <article class="module"><h3>3 · Load</h3><p>Коммутирует совместимую DC-нагрузку по одному из двух каналов.</p></article>
       </div>
-      <p class="pump-output">Выход третьего модуля → помпа</p>
-      <p class="note">Датчик подключается к ESP-модулю. Через GPIO проходит только сигнал, не ток помпы.</p>
+      <p class="note">Main сам по себе не включает полезную нагрузку. Сервер и интернет не должны обходить локальные ограничения.</p>
     </section>
-    <section class="slide slide-components" aria-label="Слайд 4">
-      <p class="eyebrow">Компоненты MVP</p>
-      <h2>Состав первого прототипа</h2>
-      <div class="cards">
-        <article class="card"><h3>Контроллер</h3><p>ESP32-C3 SuperMini<br>Wi-Fi, локальная автоматика</p></article>
-        <article class="card"><h3>Датчик</h3><p>Ёмкостной v1.2<br>Аналоговый выход: заявлено 0,8–2,5 В</p></article>
-        <article class="card"><h3>Помпа</h3><p>DC 3–6 В<br>Заявлено 100–200 мА, 1,2–1,6 л/мин</p></article>
-        <article class="card"><h3>Автоматика</h3><p>Порог влажности, лимит полива и пауза между циклами.</p></article>
+
+    <section class="slide" aria-label="Слайд 4">
+      <p class="eyebrow">Main Cube</p>
+      <div class="split">
+        <div class="copy">
+          <h2>Контроллер и центр системы</h2>
+          <div class="grid">
+            <article class="card"><h3>Вычисления</h3><p>ESP32-C3 SuperMini, прошивка и Wi-Fi.</p></article>
+            <article class="card"><h3>Подключение</h3><p>USB-C и разъёмы модулей по схеме.</p></article>
+            <article class="card"><h3>Управление</h3><p>Кнопка 12 мм видна на корпусном CAD.</p></article>
+            <article class="card"><h3>Пределы</h3><p>GPIO — только логика 3,3 В, не питание нагрузки.</p></article>
+          </div>
+        </div>
+        <figure>
+          <img src="../hardware/3Dprint/CubeMain.png" alt="CAD-рендер корпуса Main с открытой передней панелью">
+          <figcaption>CAD-концепт корпуса Main; физическое исполнение и влагозащита не проверены.</figcaption>
+        </figure>
       </div>
     </section>
+
     <section class="slide" aria-label="Слайд 5">
-      <p class="eyebrow">Ключ для помпы</p>
-      <h2>Используем MOSFET-модуль IRF520N</h2>
-      <div class="cards">
-        <article class="card"><h3>Назначение</h3><p>Низковольтное управление помпой DC 3–6 В.</p></article>
-        <article class="card"><h3>Подключение</h3><p>Модуль коммутирует цепь помпы; схема и полярность — по маркировке платы.</p></article>
-        <article class="card"><h3>Проверка модуля</h3><p>Подтверждено: управление работает от 3,3 В, в выключенном состоянии потребления нет.</p></article>
-        <article class="card"><h3>Перед поливом</h3><p>Проверить запуск конкретной помпы и нагрев модуля под нагрузкой.</p></article>
+      <p class="eyebrow">Load Cube</p>
+      <div class="split">
+        <div class="copy">
+          <h2>Два канала управления нагрузкой</h2>
+          <div class="grid">
+            <article class="card"><h3>Компоненты</h3><p>Два N-канальных MOSFET AOD4184 по текущей схеме.</p></article>
+            <article class="card"><h3>Разъёмы</h3><p>На рендере — два винтовых выходных клеммника.</p></article>
+            <article class="card"><h3>Важно</h3><p>Рабочий ток и напряжение платы не установлены.</p></article>
+            <article class="card"><h3>Не для сети</h3><p>230 В AC запрещено; гальванической развязки нет.</p></article>
+          </div>
+        </div>
+        <figure>
+          <img src="../hardware/CubeLoad/CubeLoadBoard/LoadPSB3D.png" alt="3D-рендер двухканальной платы Load с винтовыми клеммниками">
+          <figcaption>Визуализация платы по CAD, не испытанный физический модуль.</figcaption>
+        </figure>
       </div>
-      <p class="note">Результат относится к проверенному модулю. Использовать только для низковольтной DC-нагрузки, не для сети 230 В.</p>
     </section>
+
     <section class="slide" aria-label="Слайд 6">
-      <p class="eyebrow">Питание</p>
-      <h2>Один источник 5 В для системы</h2>
-      <div class="cards">
-        <article class="card"><h3>Источник</h3><p>Общий блок 5 В, 1 А питает ESP32-C3 и помпу.</p></article>
-        <article class="card"><h3>Контроллер и логика</h3><p>ESP — через USB-C. VCC MOSFET-модуля — 3,3 В, SIG — от GPIO.</p></article>
-        <article class="card"><h3>Помпа</h3><p>Питать от общей линии 5 В через MOSFET. Ключ коммутирует минус; GPIO помпу не питает.</p></article>
-        <article class="card"><h3>Проверка</h3><p>Пусковой ток неизвестен: проверить запуск, просадку 5 В и нагрев модуля.</p></article>
+      <p class="eyebrow">Электрические границы</p>
+      <h2>Пределы нельзя угадывать по одному компоненту</h2>
+      <div class="grid">
+        <article class="card"><h3>Main / USB</h3><p>Ориентир — 5 В через штатный USB-C вход конкретной ревизии. Допустимый ток узла не измерен.</p></article>
+        <article class="card"><h3>Логика</h3><p>3,3 В. Не подавать 5 В или нагрузочный ток на GPIO ESP32-C3.</p></article>
+        <article class="card"><h3>Load / нагрузка</h3><p>Пока только контролируемые низковольтные DC-испытания. Максимальный ток платы не задан.</p></article>
+        <article class="card"><h3>Испытания</h3><p>Измерить пусковой/непрерывный ток, падение напряжения, затвор и нагрев каждого канала.</p></article>
       </div>
-      <p class="note">3×AA — только через подходящий преобразователь. Не соединять USB и батареи напрямую; 230 В не входит в MVP.</p>
+      <p class="note">Абсолютный максимум MOSFET не равен рабочему рейтингу платы, дорожек, разъёма и корпуса. Внешний IRF520N — другая плата; его проверка не относится к Load на AOD4184.</p>
     </section>
+
     <section class="slide" aria-label="Слайд 7">
-      <p class="eyebrow">План работ</p>
-      <h2>Путь к первой рабочей версии</h2>
-      <div class="cards">
-        <article class="card"><h3>1. Проверить</h3><p>Запуск помпы и нагрев MOSFET-модуля под нагрузкой.</p></article>
-        <article class="card"><h3>2. Собрать стенд</h3><p>Три модуля, датчик и безопасное включение/остановка помпы.</p></article>
-        <article class="card"><h3>3. Сделать MVP</h3><p>Автополив с лимитами и работой без сервера.</p></article>
-        <article class="card"><h3>4. Расширить</h3><p>OTA с откатом, самохостящийся сервер, затем интеграция с Яндексом.</p></article>
+      <p class="eyebrow">Куда расширяется система</p>
+      <h2>От кнопки и расписания — к сценариям по данным</h2>
+      <div class="grid">
+        <article class="card"><h3>Main + Load</h3><p>Включить канал кнопкой или по расписанию — первый проверяемый сценарий.</p></article>
+        <article class="card"><h3>Main + Sensors</h3><p>Получать температуру, влажность, давление или газовые показания после выбора конкретных датчиков.</p></article>
+        <article class="card"><h3>Main + Sensors + Load</h3><p>В будущем — связывать достоверное измерение с действием по безопасному локальному правилу.</p></article>
+        <article class="card"><h3>Battery</h3><p>Потребует преобразователя и сна; автономность ещё не рассчитана.</p></article>
       </div>
+      <p class="note">Примеры — направления развития, а не функции или точность уже изготовленной системы.</p>
     </section>
+
     <section class="slide" aria-label="Слайд 8">
-      <p class="eyebrow">Следующий результат</p>
-      <h2>Автополив на модульной платформе</h2>
-      <p class="lead">Сначала проверяем MOSFET-модуль с конкретной помпой и фиксируем питание. Затем проектируем корпуса и разъёмы.</p>
+      <p class="eyebrow">Бизнес-гипотеза</p>
+      <h2>Сначала — законченный набор для DIY</h2>
+      <div class="grid">
+        <article class="card"><h3>Первые покупатели</h3><p>Энтузиасты умного дома и DIY — гипотеза для интервью.</p></article>
+        <article class="card"><h3>Ценовой тест</h3><p>7 990–10 990 ₽ за Main + Load — сценарный диапазон, не рыночная цена.</p></article>
+        <article class="card"><h3>Экономика</h3><p>Базовая валовая маржа в модели около 39%; вклад около 32% до CAC, налогов и доставки.</p></article>
+        <article class="card"><h3>Пилот</h3><p>Ориентир 150–350 тыс. ₽ на инженерные единицы и малый пилот; без зарплат и полной сертификации.</p></article>
+      </div>
+      <p class="note">Все финансовые числа — допущения без котировок. Реальных интервью и 100-покупательской панели не проводилось.</p>
     </section>
+
+    <section class="slide" aria-label="Слайд 9">
+      <p class="eyebrow">Вердикт и следующий шаг</p>
+      <h2>Развивать прототип — не масштабировать пока</h2>
+      <div class="grid">
+        <article class="card"><p class="metric">1</p><h3>Измерить Load</h3><p>Проверить два канала, нагрев и безопасное выключение.</p></article>
+        <article class="card"><p class="metric">2</p><h3>Собрать кубики</h3><p>Проверить корпуса, соединения и понятность маркировки.</p></article>
+        <article class="card"><p class="metric">3</p><h3>Показать людям</h3><p>Наблюдать сборку, провести 15–25 интервью и проверить цену.</p></article>
+        <article class="card"><p class="metric">4</p><h3>Пересчитать</h3><p>Заменить допущения на реальные BOM, комиссии и гарантии.</p></article>
+      </div>
+      <p class="lead">Итог сегодня: NOT YET для серии. Следующий рубеж — безопасный демонстратор Main + Load и доказательства спроса.</p>
+    </section>
+
     <nav class="controls" aria-label="Управление презентацией">
-      <span id="counter" aria-live="polite">1 / 8</span>
+      <span id="counter" aria-live="polite">1 / 9</span>
       <span class="hint">Стрелки ← → или пробел · Печать в PDF: Ctrl+P</span>
       <span class="buttons">
         <button id="previous" type="button" aria-label="Предыдущий слайд">←</button>
