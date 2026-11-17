@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" style="max-width:100%;height:auto" role="img" aria-labelledby="title description">
-  <title id="title">Модульная система автополива MyIoT</title>
+  <title id="title">Модульная система автополива CubeIoT</title>
   <desc id="description">Три отдельных корпуса: модуль питания, контроллер ESP32-C3 SuperMini и модуль MOSFET IRF520N. Контроллер получает данные с датчика влажности в горшке, а силовой модуль включает помпу в резервуаре и подаёт воду по трубке к растению.</desc>
   <defs>
     <linearGradient id="background" x2="0" y2="1">
@@ -53,7 +53,7 @@
   <circle cx="1475" cy="106" r="205" fill="#dbe9dc" opacity=".48"/>
   <circle cx="88" cy="915" r="190" fill="#e1eadc" opacity=".65"/>
 
-  <text x="82" y="96" class="title">Автополив MyIoT</text>
+  <text x="82" y="96" class="title">Автополив CubeIoT</text>
   <text x="84" y="134" class="subtitle">Три сменных модуля управляют поливом растения</text>
   <rect x="82" y="166" width="1436" height="1" fill="#d3ddd2"/>
 

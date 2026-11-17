@@ -1,4 +1,4 @@
-# MyIoT
+# CubeIoT
 
 Модульная IoT-система на отдельных аппаратных кубиках. **Текущий фокус — платы и корпуса Main и Load.**
 
@@ -11,7 +11,7 @@
 
 Все модули подключаются к Main. Main один не выполняет действие с нагрузкой; Main + Load могут управлять каналами локально или по расписанию. Main + Sensors + Load в будущем позволят запускать сценарии по показаниям датчиков. Sensors и Battery пока являются концепциями, а не готовыми платами.
 
-![CAD-концепт кубиков MyIoT Main и Load](hardware/3Dprint/Cube_load_main.png)
+![CAD-концепт кубиков CubeIoT Main и Load](hardware/3Dprint/Cube_load_main.png)
 
 ![CAD-рендер платы Load с двумя выходными каналами](hardware/CubeLoad/CubeLoadBoard/LoadPSB3D.png)
 
